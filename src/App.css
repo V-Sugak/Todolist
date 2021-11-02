@@ -1,8 +1,18 @@
 .App {
     padding: 30px;
     display: flex;
+    justify-content: center;
 }
 
 .App > div {
  margin-right: 50px;
+}
+
+.todoList {
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.activeButton {
+    background-color: royalblue;
 }
