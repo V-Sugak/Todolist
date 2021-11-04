@@ -5,7 +5,7 @@
 }
 
 .App > div {
- margin-right: 50px;
+    margin-right: 50px;
 }
 
 .todoList {
@@ -15,4 +15,16 @@
 
 .activeButton {
     background-color: royalblue;
+}
+
+.error {
+    border-color: red;
+}
+
+.errorDiv {
+    color: red;
+}
+
+.isDone {
+    opacity: 0.5;
 }
