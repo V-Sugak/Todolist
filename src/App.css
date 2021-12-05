@@ -1,4 +1,4 @@
-.App {
+/*.App {
     padding: 30px;
     display: flex;
     justify-content: center;
@@ -10,7 +10,6 @@
 
 .todoList {
     padding: 10px;
-    border: 1px solid black;
 }
 
 .activeButton {
@@ -23,7 +22,7 @@
 
 .errorDiv {
     color: red;
-}
+}*/
 
 .isDone {
     opacity: 0.5;

@@ -1,4 +1,7 @@
+import {IconButton, TextField} from "@material-ui/core";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import {AddBox} from "@material-ui/icons";
+
 
 type addItemFormPropsType = {
     addItem: (title: string) => void
@@ -25,16 +28,21 @@ export const AddItemForm = (props: addItemFormPropsType) => {
             addTask()
         }
     }
+    const errorMessage = error && <div style={{color: "red", textAlign: 'center'}}>Title is required</div>
 
     return (
         <div>
-            <input placeholder={'Enter title...'}
-                   className={error ? 'error' : ''}
-                   value={title}
-                   onKeyPress={onKeyPressHandler}
-                   onChange={onNewTitleChangeHandler}
-                   type="text"/>
-            <button onClick={addTask}>+</button>
-            {error && <div className={'errorDiv'}>Title is required</div>}
+            <TextField variant="outlined"
+                       label="Enter title..."
+                       size={'small'}
+                       className={error ? 'error' : ''}
+                       value={title}
+                       onKeyPress={onKeyPressHandler}
+                       onChange={onNewTitleChangeHandler}
+                       error={error}
+                       helperText={errorMessage}/>
+            <IconButton onClick={addTask} size={'small'}>
+                <AddBox color={'primary'} fontSize={'large'}/>
+            </IconButton>
         </div>)
 }
