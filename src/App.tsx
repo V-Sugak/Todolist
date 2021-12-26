@@ -13,7 +13,7 @@ export type TodolistType = {
     filter: FilterType
 }
 
-type TasksType = {
+export type TasksType = {
     [key: string]: Array<TaskType>
 }
 
@@ -45,17 +45,10 @@ function App() {
     const removeTask = (taskId: string, todolistId: string) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId)})
     }
-
-
-    const changeFilter = (filter: FilterType, todolistId: string) => {
-        setTodolist(todolist.map(tl => tl.id === todolistId ? {...tl, filter: filter} : tl))
-    }
-
     const addTask = (title: string, todolistId: string) => {
         const newTask = {id: v1(), title: title, isDone: false};
         setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
     }
-
     const changeIsDone = (taskId: string, isDone: boolean, todolistId: string) => {
         setTasks({
             ...tasks,
@@ -64,24 +57,24 @@ function App() {
             })
         })
     }
+    const changeTitleTask = (id: string, title: string, todolistId: string) => {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === id ? {...t, title} : t)})
+    }
 
+    const changeFilter = (filter: FilterType, todolistId: string) => {
+        setTodolist(todolist.map(tl => tl.id === todolistId ? {...tl, filter: filter} : tl))
+    }
     const removeTodolist = (todolistId: string) => {
         setTodolist(todolist.filter(tl => tl.id !== todolistId));
         delete tasks[todolistId];
         setTasks({...tasks});
     }
-
     const addTodolist = (title: string) => {
         const todolistId = v1();
         const newTodolist: TodolistType = {id: todolistId, title, filter: "all"};
         setTodolist([newTodolist, ...todolist]);
         setTasks({...tasks, [todolistId]: []});
     }
-
-    const changeTitleTask = (id: string, title: string, todolistId: string) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === id ? {...t, title} : t)})
-    }
-
     const changeTitleTodolist = (title: string, todolistId: string) => {
         setTodolist(todolist.map(tl => tl.id === todolistId ? {...tl, title} : tl))
     }
