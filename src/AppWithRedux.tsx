@@ -13,6 +13,9 @@ import {
     todolistsReducer
 } from "./state/todolists-reducer";
 import {addTaskAC, changeIsDoneAC, changeTitleTaskAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootReducer} from "./state/store";
+import {TasksType} from "./App";
 
 export type FilterType = 'all' | 'completed' | 'active';
 export type TodolistType = {
@@ -21,62 +24,65 @@ export type TodolistType = {
     filter: FilterType
 }
 
-function AppWithReducers() {
 
-    const todolistId1 = v1()
-    const todolistId2 = v1()
+function AppWithRedux() {
 
-    const [todolist, dispatchToTodolist] = useReducer(todolistsReducer, [
-        {id: todolistId1, title: 'What to learn', filter: "all"},
-        {id: todolistId2, title: 'What to buy', filter: "all"}
-    ])
+    const dispatch = useDispatch();
+    const todolists = useSelector<AppRootReducer, Array<TodolistType>>(state => state.todolists)
+    const tasks = useSelector<AppRootReducer, TasksType>(state => state.tasks)
+
+    /* const todolistId1 = v1()
+     const todolistId2 = v1()
+
+     const [todolist, dispatchToTodolist] = useReducer(todolistsReducer, [
+         {id: todolistId1, title: 'What to learn', filter: "all"},
+         {id: todolistId2, title: 'What to buy', filter: "all"}
+     ])
 
 
-    const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
-        [todolistId1]: [
-            {id: v1(), title: 'CSS&HTML', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-        ],
-        [todolistId2]: [
-            {id: v1(), title: 'Milk', isDone: true},
-            {id: v1(), title: 'Bread', isDone: true},
-            {id: v1(), title: 'Sugar', isDone: true},
-        ],
-    })
-
+     const [tasks, dispatchToTasks] = useReducer(tasksReducer, {
+         [todolistId1]: [
+             {id: v1(), title: 'CSS&HTML', isDone: true},
+             {id: v1(), title: 'JS', isDone: true},
+             {id: v1(), title: 'React', isDone: false},
+         ],
+         [todolistId2]: [
+             {id: v1(), title: 'Milk', isDone: true},
+             {id: v1(), title: 'Bread', isDone: true},
+             {id: v1(), title: 'Sugar', isDone: true},
+         ],
+     })
+ */
 
     const removeTask = (taskId: string, todolistId: string) => {
-        dispatchToTasks(removeTaskAC(taskId, todolistId));
+        dispatch(removeTaskAC(taskId, todolistId));
     }
     const addTask = (title: string, todolistId: string) => {
-        dispatchToTasks(addTaskAC(title, todolistId));
+        dispatch(addTaskAC(title, todolistId));
     }
     const changeIsDone = (taskId: string, isDone: boolean, todolistId: string) => {
-        dispatchToTasks(changeIsDoneAC(taskId, isDone, todolistId));
+        dispatch(changeIsDoneAC(taskId, isDone, todolistId));
     }
     const changeTitleTask = (id: string, title: string, todolistId: string) => {
-        dispatchToTasks(changeTitleTaskAC(id, title, todolistId))
+        dispatch(changeTitleTaskAC(id, title, todolistId))
     }
 
     const changeFilter = (filter: FilterType, todolistId: string) => {
-        dispatchToTodolist(changeTodolistFilterAC(filter, todolistId))
+        dispatch(changeTodolistFilterAC(filter, todolistId))
     }
     const changeTitleTodolist = (title: string, todolistId: string) => {
-        dispatchToTodolist(changeTodolistTitleAC(title, todolistId))
+        dispatch(changeTodolistTitleAC(title, todolistId))
     }
     const removeTodolist = (todolistId: string) => {
         const action = removeTodolistAC(todolistId)
-        dispatchToTodolist(action)
-        dispatchToTasks(action)
+        dispatch(action)
     }
     const addTodolist = (title: string) => {
         const action = addTodolistAC(title, v1())
-        dispatchToTodolist(action)
-        dispatchToTasks(action)
+        dispatch(action)
     }
 
-    const todolistComponent = todolist.map(tl => {
+    const todolistComponent = todolists.map(tl => {
         let tasksForTodolist = tasks[tl.id];
 
         if (tl.filter === "active") {
@@ -133,4 +139,4 @@ function AppWithReducers() {
     );
 }
 
-export default AppWithReducers;
+export default AppWithRedux;
