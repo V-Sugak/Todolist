@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
@@ -23,24 +23,24 @@ export type TodolistType = {
 
 
 function AppWithRedux() {
-
+    console.log('App')
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootReducer, Array<TodolistType>>(state => state.todolists)
 
-    const changeFilter = (filter: FilterType, todolistId: string) => {
+    const changeFilter = useCallback((filter: FilterType, todolistId: string) => {
         dispatch(changeTodolistFilterAC(filter, todolistId))
-    }
-    const changeTitleTodolist = (title: string, todolistId: string) => {
+    }, [dispatch])
+    const changeTitleTodolist = useCallback((title: string, todolistId: string) => {
         dispatch(changeTodolistTitleAC(title, todolistId))
-    }
-    const removeTodolist = (todolistId: string) => {
+    }, [dispatch])
+    const removeTodolist = useCallback((todolistId: string) => {
         const action = removeTodolistAC(todolistId)
         dispatch(action)
-    }
-    const addTodolist = (title: string) => {
+    }, [dispatch])
+    const addTodolist = useCallback((title: string) => {
         const action = addTodolistAC(title, v1())
         dispatch(action)
-    }
+    }, [dispatch])
 
     const todolistComponent = todolists.map(tl => {
         return (

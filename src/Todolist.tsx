@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from "react";
+import React, {ChangeEvent, useCallback} from "react";
 import {FilterType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -23,8 +23,8 @@ type TodolistPropsType = {
     changeTitleTodolist: (title: string, todolistId: string) => void
 }
 
-export const Todolist = (props: TodolistPropsType) => {
-
+export const Todolist = React.memo((props: TodolistPropsType) => {
+    console.log('Todolist')
     const dispatch = useDispatch();
     let tasks = useSelector<AppRootReducer, Array<TaskType>>(state => state.tasks[props.todolistId])
 
@@ -38,13 +38,16 @@ export const Todolist = (props: TodolistPropsType) => {
     }
 
 
-    const changeFilter = (value: FilterType) => props.changeFilter(value, props.todolistId)
-    const addTask = (title: string) => {
+    const changeFilter = useCallback((value: FilterType) => props.changeFilter(value, props.todolistId), [props.changeFilter, props.todolistId]);
+
+    const addTask = useCallback((title: string) => {
         dispatch(addTaskAC(title, props.todolistId));
-    }
-    const onChangeTidolistTitleHandler = (title: string) => {
+    }, [dispatch, props.todolistId]);
+
+    const onChangeTodolistTitleHandler = useCallback((title: string) => {
         props.changeTitleTodolist(title, props.todolistId)
-    }
+    }, [props.changeTitleTodolist, props.todolistId]);
+
 
     let tasksJSXElement = tasks.map(t => {
         const removeTask = () => {
@@ -56,29 +59,16 @@ export const Todolist = (props: TodolistPropsType) => {
         const onChangeTitleHandler = (title: string) => {
             dispatch(changeTitleTaskAC(t.id, title, props.todolistId))
         }
-        return (
-            <ListItem key={t.id} className={t.isDone ? 'is-done' : ''}
-                      divider
-                      style={{
-                          padding: '3px 0',
-                          display: 'flex',
-                          justifyContent: 'space-between'
-                      }}>
-                <Checkbox checked={t.isDone}
-                          onChange={onChangeStatusHandler}
-                          color={'primary'}/>
-                <EditableSpan title={t.title} onChange={onChangeTitleHandler}/>
-                <IconButton onClick={removeTask} aria-label="delete" size={'small'}>
-                    <Delete fontSize={'small'}/>
-                </IconButton>
-            </ListItem>
-        )
+        
+        <Task removeTask={removeTask}
+              onChangeStatusHandler={onChangeStatusHandler}
+              onChangeTitleHandler={onChangeTitleHandler}/>
     })
 
     return (
         <div className='todoList'>
             <Typography align={'center'} variant={'h5'} style={{fontWeight: 'bold'}}>
-                <EditableSpan title={props.title} onChange={onChangeTidolistTitleHandler}/>
+                <EditableSpan title={props.title} onChange={onChangeTodolistTitleHandler}/>
                 <IconButton onClick={() => props.removeTodolist(props.todolistId)} aria-label="delete">
                     <Delete/>
                 </IconButton>
@@ -106,6 +96,34 @@ export const Todolist = (props: TodolistPropsType) => {
                 </ButtonGroup>
             </div>
         </div>
+    )
+})
+
+type TaskPropsType = {
+    removeTask: () => void
+    onChangeStatusHandler: () => void
+    onChangeTitleHandler: () => void
+}
+
+const Task = (props: TaskPropsType) => {
+
+
+    return (
+        <ListItem key={t.id} className={t.isDone ? 'is-done' : ''}
+                  divider
+                  style={{
+                      padding: '3px 0',
+                      display: 'flex',
+                      justifyContent: 'space-between'
+                  }}>
+            <Checkbox checked={t.isDone}
+                      onChange={props.onChangeStatusHandler}
+                      color={'primary'}/>
+            <EditableSpan title={t.title} onChange={props.onChangeTitleHandler}/>
+            <IconButton onClick={props.removeTask} aria-label="delete" size={'small'}>
+                <Delete fontSize={'small'}/>
+            </IconButton>
+        </ListItem>
     )
 }
 

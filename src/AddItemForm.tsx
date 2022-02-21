@@ -6,7 +6,8 @@ import {AddBox} from "@material-ui/icons";
 type addItemFormPropsType = {
     addItem: (title: string) => void
 }
-export const AddItemForm = (props: addItemFormPropsType) => {
+export const AddItemForm = React.memo((props: addItemFormPropsType) => {
+    console.log('AddItemForm')
     const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
@@ -21,7 +22,9 @@ export const AddItemForm = (props: addItemFormPropsType) => {
     }
     const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value);
-        setError(false)
+        if (error) {
+            setError(false)
+        }
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -45,4 +48,4 @@ export const AddItemForm = (props: addItemFormPropsType) => {
                 <AddBox color={'primary'} fontSize={'large'}/>
             </IconButton>
         </div>)
-}
+})
