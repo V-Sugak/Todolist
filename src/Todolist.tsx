@@ -7,6 +7,7 @@ import {Delete} from "@material-ui/icons";
 import {addTaskAC, changeIsDoneAC, changeTitleTaskAC, removeTaskAC} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootReducer} from "./state/store";
+import {Task} from "./Task";
 
 export type TaskType = {
     id: string
@@ -50,19 +51,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
 
 
     let tasksJSXElement = tasks.map(t => {
-        const removeTask = () => {
-            dispatch(removeTaskAC(t.id, props.todolistId));
-        }
-        const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            dispatch(changeIsDoneAC(t.id, e.currentTarget.checked, props.todolistId));
-        }
-        const onChangeTitleHandler = (title: string) => {
-            dispatch(changeTitleTaskAC(t.id, title, props.todolistId))
-        }
-        
-        <Task removeTask={removeTask}
-              onChangeStatusHandler={onChangeStatusHandler}
-              onChangeTitleHandler={onChangeTitleHandler}/>
+        return <Task key={t.id} task={t} todolistId={props.todolistId}/>
     })
 
     return (
@@ -99,31 +88,4 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     )
 })
 
-type TaskPropsType = {
-    removeTask: () => void
-    onChangeStatusHandler: () => void
-    onChangeTitleHandler: () => void
-}
-
-const Task = (props: TaskPropsType) => {
-
-
-    return (
-        <ListItem key={t.id} className={t.isDone ? 'is-done' : ''}
-                  divider
-                  style={{
-                      padding: '3px 0',
-                      display: 'flex',
-                      justifyContent: 'space-between'
-                  }}>
-            <Checkbox checked={t.isDone}
-                      onChange={props.onChangeStatusHandler}
-                      color={'primary'}/>
-            <EditableSpan title={t.title} onChange={props.onChangeTitleHandler}/>
-            <IconButton onClick={props.removeTask} aria-label="delete" size={'small'}>
-                <Delete fontSize={'small'}/>
-            </IconButton>
-        </ListItem>
-    )
-}
 
