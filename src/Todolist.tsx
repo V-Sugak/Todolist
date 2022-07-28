@@ -6,7 +6,7 @@ import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem, Typography} f
 import {Delete} from "@material-ui/icons";
 import {addTaskAC, changeIsDoneAC, changeTitleTaskAC, removeTaskAC} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootReducer} from "./state/store";
+import {AppRootType} from "./state/store";
 import {Task} from "./Task";
 
 export type TaskType = {
@@ -27,7 +27,7 @@ type TodolistPropsType = {
 export const Todolist = React.memo((props: TodolistPropsType) => {
     console.log('Todolist')
     const dispatch = useDispatch();
-    let tasks = useSelector<AppRootReducer, Array<TaskType>>(state => state.tasks[props.todolistId])
+    let tasks = useSelector<AppRootType, Array<TaskType>>(state => state.tasks[props.todolistId])
 
 
     if (props.filter === "active") {
