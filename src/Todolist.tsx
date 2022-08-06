@@ -1,19 +1,14 @@
-import React, {ChangeEvent, useCallback} from "react";
-import {FilterType} from "./App";
+import React, {useCallback} from 'react';
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
-import {Button, ButtonGroup, Checkbox, IconButton, List, ListItem, Typography} from "@material-ui/core";
+import {Button, ButtonGroup, IconButton, List, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {addTaskAC, changeIsDoneAC, changeTitleTaskAC, removeTaskAC} from "./state/tasks-reducer";
+import {addTaskAC} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "./state/store";
 import {Task} from "./Task";
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+import {FilterType} from "./state/todo-lists-reducer";
+import {TaskStatuses, TaskType} from "./api/todolists-api";
 
 type TodolistPropsType = {
     todolistId: string
@@ -31,11 +26,11 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
 
 
     if (props.filter === "active") {
-        tasks = tasks.filter(t => !t.isDone)
+        tasks = tasks.filter(t => t.status === TaskStatuses.New)
     }
 
     if (props.filter === "completed") {
-        tasks = tasks.filter(t => t.isDone)
+        tasks = tasks.filter(t =>t.status === TaskStatuses.Completed)
     }
 
 
