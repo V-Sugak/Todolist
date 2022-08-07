@@ -1,5 +1,5 @@
-import React, {useCallback} from 'react';
-import './App.css';
+import React, {useCallback, useEffect} from "react";
+import "./App.css";
 import {Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
@@ -9,7 +9,7 @@ import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC, FilterType,
-    removeTodolistAC, TodolistDomainType,
+    removeTodolistAC, setTodoListsAC, setTodoListsTC, TodolistDomainType,
 } from "./state/todo-lists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "./state/store";
@@ -17,7 +17,11 @@ import {AppRootType} from "./state/store";
 function AppWithRedux() {
     console.log('App')
     const dispatch = useDispatch();
-    const todolists = useSelector<AppRootType, Array<TodolistDomainType>>(state => state.todolists)
+    const todolists = useSelector<AppRootType, Array<TodolistDomainType>>(state => state.todoLists)
+
+    useEffect(() => {
+        dispatch(setTodoListsTC())
+    }, [])
 
     const changeFilter = useCallback((filter: FilterType, todolistId: string) => {
         dispatch(changeTodolistFilterAC(filter, todolistId))
@@ -37,7 +41,7 @@ function AppWithRedux() {
     const todolistComponent = todolists.map(tl => {
         return (
             <Grid item key={tl.id}>
-                <Paper elevation={8} style={{padding: '50px'}}>
+                <Paper elevation={8} style={{padding: "50px"}}>
                     <Todolist
                         key={tl.id}
                         todolistId={tl.id}
@@ -54,19 +58,19 @@ function AppWithRedux() {
 
     return (
         <div className="App">
-            <AppBar position={'sticky'}>
+            <AppBar position={"sticky"}>
                 <Toolbar style={{justifyContent: "space-between"}}>
-                    <IconButton edge={'start'} color={'inherit'} aria-label={'menu'}>
+                    <IconButton edge={"start"} color={"inherit"} aria-label={"menu"}>
                         <Menu/>
                     </IconButton>
-                    <Typography variant={'h6'}>
+                    <Typography variant={"h6"}>
                         Todolist
                     </Typography>
-                    <Button variant="outlined" color={'inherit'}>Login</Button>
+                    <Button variant="outlined" color={"inherit"}>Login</Button>
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <Grid container style={{padding: '20px 0'}}>
+                <Grid container style={{padding: "20px 0"}}>
                     <AddItemForm addItem={addTodolist}/>
                 </Grid>
                 <Grid container spacing={4}>
