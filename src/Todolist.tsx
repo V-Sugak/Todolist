@@ -1,9 +1,9 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, ButtonGroup, IconButton, List, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {addTaskAC} from "./state/tasks-reducer";
+import {addTaskAC, setTasksTC} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "./state/store";
 import {Task} from "./Task";
@@ -24,6 +24,9 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     const dispatch = useDispatch();
     let tasks = useSelector<AppRootType, Array<TaskType>>(state => state.tasks[props.todolistId])
 
+    useEffect(() => {
+        dispatch(setTasksTC(props.todolistId))
+    }, [props.todolistId])
 
     if (props.filter === "active") {
         tasks = tasks.filter(t => t.status === TaskStatuses.New)

@@ -2,7 +2,7 @@ import {
     addTaskAC,
     changeStatusTaskAC,
     changeTitleTaskAC,
-    removeTaskAC,
+    removeTaskAC, setTasksAC,
     tasksReducer,
     TasksStateType
 } from "./tasks-reducer";
@@ -220,3 +220,13 @@ test("todo-lists should be set to the state ", () => {
     expect(endState["Id1"]).toEqual([]);
     expect(endState["Id2"]).toEqual([]);
 })
+
+test("tasks should be set to the state", () => {
+    const endState = tasksReducer({
+        "todolistId2": [],
+        "todolistId1": []
+    }, setTasksAC(startState["todolistId1"], "todolistId1"))
+
+    expect(endState["todolistId2"].length).toBe(0);
+    expect(endState["todolistId1"].length).toBe(3);
+});

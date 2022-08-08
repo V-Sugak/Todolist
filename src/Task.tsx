@@ -1,6 +1,6 @@
 import {useDispatch} from "react-redux";
-import {changeStatusTaskAC, changeTitleTaskAC, removeTaskAC} from "./state/tasks-reducer";
-import React, {ChangeEvent, useCallback} from "react";
+import {changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, setTasksTC} from "./state/tasks-reducer";
+import React, {ChangeEvent, useCallback, useEffect} from "react";
 import {Checkbox, IconButton, ListItem} from "@material-ui/core";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
