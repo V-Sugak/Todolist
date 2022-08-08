@@ -1,9 +1,11 @@
 import axios from "axios";
 
 const instance = axios.create({
+    baseURL: "https://social-network.samuraijs.com/api/1.1/",
     withCredentials: true,
-    baseURL: "https://social-network.samuraijs.com/api/1.0/",
-    headers: {"API-KEY": "4fa630d1-6fae-4037-80dd-d195b9c3e03c"},
+    headers: {
+        "API-KEY": '4fa630d1-6fae-4037-80dd-d195b9c3e03c'
+    }
 })
 
 export const todoListsApi = {
@@ -22,7 +24,7 @@ export const todoListsApi = {
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
     },
-    deleteTask(todoListId: string, taskId: string) {
+    deleteTask(taskId: string, todoListId: string) {
         return instance.delete<ResponseType>(`todo-lists/${todoListId}/tasks/${taskId}`)
     },
     createTask(todolistId: string, title: string) {
@@ -45,12 +47,14 @@ export type TodoListType = {
     addedDate: string
     order: number
 }
+
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
+
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,
@@ -58,6 +62,7 @@ export enum TaskPriorities {
     Urgently = 3,
     Later = 4
 }
+
 export type TaskType = {
     description: string
     title: string

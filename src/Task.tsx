@@ -1,6 +1,6 @@
 import {useDispatch} from "react-redux";
-import {changeStatusTaskAC, changeTitleTaskAC, removeTaskAC, setTasksTC} from "./state/tasks-reducer";
-import React, {ChangeEvent, useCallback, useEffect} from "react";
+import {changeStatusTaskAC, changeTitleTaskAC, removeTaskTC} from "./state/tasks-reducer";
+import React, {ChangeEvent, useCallback} from "react";
 import {Checkbox, IconButton, ListItem} from "@material-ui/core";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
@@ -15,7 +15,7 @@ export const Task = React.memo((props: TaskPropsType) => {
     console.log('Task')
     const dispatch = useDispatch();
     const removeTask = () => {
-        dispatch(removeTaskAC(props.task.id, props.todolistId));
+        dispatch(removeTaskTC(props.task.id, props.todolistId));
     }
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(changeStatusTaskAC(props.task.id, e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New, props.todolistId));

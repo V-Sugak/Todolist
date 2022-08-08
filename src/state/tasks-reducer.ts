@@ -102,6 +102,12 @@ export const setTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
             dispatch(setTasksAC(res.data.items, todolistId))
         })
 }
+export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch) => {
+    todoListsApi.deleteTask(taskId, todolistId)
+        .then(res => {
+            dispatch(removeTaskAC(taskId, todolistId))
+        })
+}
 
 //types
 export type ActionsType = ReturnType<typeof removeTaskAC>
