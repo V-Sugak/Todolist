@@ -3,7 +3,7 @@ import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, ButtonGroup, IconButton, List, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {addTaskAC, setTasksTC} from "./state/tasks-reducer";
+import {addTaskAC, addTaskTC, setTasksTC} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "./state/store";
 import {Task} from "./Task";
@@ -33,14 +33,14 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     }
 
     if (props.filter === "completed") {
-        tasks = tasks.filter(t =>t.status === TaskStatuses.Completed)
+        tasks = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
 
 
     const changeFilter = useCallback((value: FilterType) => props.changeFilter(value, props.todolistId), [props.changeFilter, props.todolistId]);
 
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskAC(title, props.todolistId));
+        dispatch(addTaskTC(props.todolistId, title));
     }, [dispatch, props.todolistId]);
 
     const onChangeTodolistTitleHandler = useCallback((title: string) => {
