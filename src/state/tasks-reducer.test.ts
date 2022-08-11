@@ -1,13 +1,8 @@
 import {
-    addTaskAC,
-    changeStatusTaskAC,
-    changeTitleTaskAC,
-    removeTaskAC, setTasksAC,
-    tasksReducer,
-    TasksStateType
+    addTaskAC, removeTaskAC, setTasksAC,
+    tasksReducer, TasksStateType, updateTaskAC
 } from "./tasks-reducer";
 import {addTodolistAC, removeTodolistAC, setTodoListsAC} from "./todo-lists-reducer";
-import {v1} from "uuid";
 import {TaskPriorities, TaskStatuses, TaskType, TodoListType} from "../api/todolists-api";
 
 let startState: TasksStateType;
@@ -187,14 +182,14 @@ test("correct task should be added to correct array", () => {
 })
 
 test("status of specified task should be changed", () => {
-    const endState = tasksReducer(startState, changeStatusTaskAC("2", TaskStatuses.New, "todolistId2"))
+    const endState = tasksReducer(startState, updateTaskAC("2", {status: TaskStatuses.New}, "todolistId2"))
 
     expect(endState["todolistId1"][1].status).toBe(TaskStatuses.Completed);
     expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New);
 });
 
 test("title of specified task should be changed", () => {
-    const endState = tasksReducer(startState, changeTitleTaskAC("2", "juice", "todolistId2"))
+    const endState = tasksReducer(startState, updateTaskAC("2", {title: "juice"}, "todolistId2"))
 
     expect(endState["todolistId1"][1].title).toBe("JS");
     expect(endState["todolistId2"][1].title).toBe("juice");
