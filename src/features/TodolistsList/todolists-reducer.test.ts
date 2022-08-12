@@ -6,7 +6,7 @@ import {
     removeTodolistAC, setTodoListsAC, TodolistDomainType,
     todoListsReducer
 } from "./todo-lists-reducer";
-import {TodoListType} from "../api/todolists-api";
+import {TodoListType} from "../../api/todolists-api";
 
 let startState: Array<TodolistDomainType>;
 let todolistId1: string;

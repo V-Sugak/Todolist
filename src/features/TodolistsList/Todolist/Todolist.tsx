@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
-import {AddItemForm} from "./AddItemForm";
-import {EditableSpan} from "./EditableSpan";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, ButtonGroup, IconButton, List, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {addTaskAC, addTaskTC, setTasksTC} from "./state/tasks-reducer";
+import {addTaskAC, addTaskTC, setTasksTC} from "../tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootType} from "./state/store";
-import {Task} from "./Task";
-import {FilterType} from "./state/todo-lists-reducer";
-import {TaskStatuses, TaskType} from "./api/todolists-api";
+import {AppRootType} from "../../../App/store";
+import {Task} from "./Task/Task";
+import {FilterType} from "../todo-lists-reducer";
+import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 
 type TodolistPropsType = {
     todolistId: string
@@ -20,7 +20,6 @@ type TodolistPropsType = {
 }
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
-    console.log('Todolist')
     const dispatch = useDispatch();
     let tasks = useSelector<AppRootType, Array<TaskType>>(state => state.tasks[props.todolistId])
 
