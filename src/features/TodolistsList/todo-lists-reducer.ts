@@ -1,5 +1,6 @@
 import {todoListsApi, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
+import {AppActionsType, setAppStatusAC} from "../../App/app-reducer";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -37,31 +38,42 @@ export const changeTodolistFilterAC = (filter: FilterType, todolistId: string) =
     filter,
     todolistId
 } as const)
-export const setTodoListsAC = (todoLists: Array<TodoListType>) => ({type: "TODO-LISTS/SET-TODO-LISTS", todoLists} as const)
+export const setTodoListsAC = (todoLists: Array<TodoListType>) => ({
+    type: "TODO-LISTS/SET-TODO-LISTS",
+    todoLists
+} as const)
 
 //thunks
 export const setTodoListsTC = () => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setAppStatusAC("loading"))
     todoListsApi.getTodoLists()
         .then(res => {
             dispatch(setTodoListsAC(res.data))
+            dispatch(setAppStatusAC("succeeded"))
         })
 }
 export const removeTodoListTC = (todoListId: string) => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setAppStatusAC("loading"))
     todoListsApi.deleteTodoList(todoListId)
         .then(res => {
             dispatch(removeTodolistAC(todoListId))
+            dispatch(setAppStatusAC("succeeded"))
         })
 }
 export const addTodoListTC = (title: string) => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setAppStatusAC("loading"))
     todoListsApi.creatTodoList(title)
         .then(res => {
             dispatch(addTodolistAC(res.data.data.item))
+            dispatch(setAppStatusAC("succeeded"))
         })
 }
 export const changeTodolistTitleTC = (todoListId: string, title: string) => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setAppStatusAC("loading"))
     todoListsApi.updateTodoList(todoListId, title)
         .then(res => {
             dispatch(changeTodolistTitleAC(todoListId, title))
+            dispatch(setAppStatusAC("succeeded"))
         })
 }
 
@@ -76,3 +88,4 @@ export type ActionsType =
     | ReturnType<typeof changeTodolistTitleAC>
     | ReturnType<typeof changeTodolistFilterAC>
     | ReturnType<typeof setTodoListsAC>
+    | AppActionsType
