@@ -1,14 +1,17 @@
 import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
-import {Button, ButtonGroup, IconButton, List, Typography} from "@material-ui/core";
-import {Delete} from "@material-ui/icons";
-import {addTaskAC, addTaskTC, setTasksTC} from "../tasks-reducer";
+import {addTaskTC, setTasksTC} from "../tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "../../../App/store";
 import {Task} from "./Task/Task";
 import {FilterType} from "../todo-lists-reducer";
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
+import Typography from "@mui/material/Typography";
+import IconButton from '@mui/material/IconButton';
+import {Delete} from "@mui/icons-material";
+import {ButtonGroup, List} from "@mui/material";
+import Button from "@mui/material/Button";
 
 type TodolistPropsType = {
     todolistId: string

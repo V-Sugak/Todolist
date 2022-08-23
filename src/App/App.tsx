@@ -1,23 +1,23 @@
-import React, {useEffect} from "react";
+import React from "react";
 import "./App.css";
-import {AppBar, Button, Container, IconButton, LinearProgress, Toolbar, Typography} from '@material-ui/core';
-import {Menu} from "@material-ui/icons";
-import {setTodoListsTC,} from "../features/TodolistsList/todo-lists-reducer";
-import {useDispatch, useSelector} from "react-redux";
 import {TodoLists} from "../features/TodolistsList/TodoLists";
-import {AppRootType} from "./store";
-import {RequestStatusType} from "./app-reducer";
+import {useAppSelector} from "./store";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import {Menu} from '@mui/icons-material';
+import LinearProgress from "@mui/material/LinearProgress";
+import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 
 function App() {
-    const dispatch = useDispatch();
-    const status = useSelector<AppRootType, RequestStatusType>(state => state.app.status)
-
-    useEffect(() => {
-        dispatch(setTodoListsTC())
-    }, [])
+    const status = useAppSelector(state => state.app.status)
 
     return (
         <div className="App">
+            <ErrorSnackbar/>
             <AppBar position={"sticky"}>
                 <Toolbar style={{justifyContent: "space-between"}}>
                     <IconButton edge={"start"} color={"inherit"} aria-label={"menu"}>

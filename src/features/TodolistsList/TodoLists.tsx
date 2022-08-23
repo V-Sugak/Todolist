@@ -1,20 +1,23 @@
-import React, {useCallback} from "react";
-import {Grid, Paper} from "@material-ui/core";
+import React, {useCallback, useEffect} from "react";
 import {Todolist} from "./Todolist/Todolist";
 import {
     addTodoListTC,
     changeTodolistFilterAC,
     changeTodolistTitleTC,
-    FilterType, removeTodoListTC,
+    FilterType, removeTodoListTC, setTodoListsTC,
     TodolistDomainType
 } from "./todo-lists-reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "../../App/store";
+import {Grid, Paper} from "@mui/material";
 
 export const TodoLists = (props: TodoListsPropsType) => {
     const dispatch = useDispatch();
     const todoLists = useSelector<AppRootType, Array<TodolistDomainType>>(state => state.todoLists)
+    useEffect(() => {
+        dispatch(setTodoListsTC())
+    }, [dispatch])
 
     const changeFilter = useCallback((filter: FilterType, todolistId: string) => {
         dispatch(changeTodolistFilterAC(filter, todolistId))

@@ -1,6 +1,7 @@
 import {todoListsApi, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
-import {AppActionsType, setAppStatusAC} from "../../App/app-reducer";
+import {AppActionsType, setAppErrorAC, setAppStatusAC} from "../../App/app-reducer";
+import {AxiosError} from "axios";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -64,16 +65,39 @@ export const addTodoListTC = (title: string) => (dispatch: Dispatch<ActionsType>
     dispatch(setAppStatusAC("loading"))
     todoListsApi.creatTodoList(title)
         .then(res => {
-            dispatch(addTodolistAC(res.data.data.item))
-            dispatch(setAppStatusAC("succeeded"))
+                if (res.data.resultCode === 0) {
+                    dispatch(addTodolistAC(res.data.data.item))
+                    dispatch(setAppStatusAC("succeeded"))
+                } else {
+                    if (res.data.messages.length) {
+                        dispatch(setAppErrorAC(res.data.messages[0]))
+                    } else {
+                        dispatch(setAppErrorAC("Some error"))
+                    }
+                    dispatch(setAppStatusAC("failed"))
+                }
+            }
+        )
+        .catch((error: AxiosError) => {
+            dispatch(setAppErrorAC(error.message))
+            dispatch(setAppStatusAC("failed"))
         })
 }
 export const changeTodolistTitleTC = (todoListId: string, title: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.updateTodoList(todoListId, title)
         .then(res => {
-            dispatch(changeTodolistTitleAC(todoListId, title))
-            dispatch(setAppStatusAC("succeeded"))
+            if (res.data.resultCode === 0) {
+                dispatch(changeTodolistTitleAC(todoListId, title))
+                dispatch(setAppStatusAC("succeeded"))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setAppErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(setAppErrorAC("Some error"))
+                }
+                dispatch(setAppStatusAC("failed"))
+            }
         })
 }
 

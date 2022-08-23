@@ -1,7 +1,8 @@
 import React from 'react';
 import  {useState, ChangeEvent, KeyboardEvent} from "react";
-import {IconButton, TextField} from "@material-ui/core";
-import {Edit} from "@material-ui/icons";
+import TextField from '@mui/material/TextField';
+import IconButton from "@mui/material/IconButton";
+import {Edit} from "@mui/icons-material";
 
 type EditableSpanPropsType = {
     title: string
