@@ -6,7 +6,7 @@ import {
     changeTodolistTitleTC,
     FilterType, removeTodoListTC, setTodoListsTC,
     TodolistDomainType
-} from "./todo-lists-reducer";
+} from "./todolists-reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "../../App/store";
@@ -49,6 +49,7 @@ export const TodoLists = (props: TodoListsPropsType) => {
                                 filter={tl.filter}
                                 removeTodolist={removeTodolist}
                                 changeTitleTodolist={changeTitleTodolist}
+                                entityStatus={tl.entityStatus}
                             />
                         </Paper>
                     </Grid>

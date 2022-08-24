@@ -1,17 +1,18 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {addTaskTC, setTasksTC} from "../tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "../../../App/store";
 import {Task} from "./Task/Task";
-import {FilterType} from "../todo-lists-reducer";
+import {FilterType} from "../todolists-reducer";
 import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 import Typography from "@mui/material/Typography";
 import IconButton from '@mui/material/IconButton';
 import {Delete} from "@mui/icons-material";
 import {ButtonGroup, List} from "@mui/material";
 import Button from "@mui/material/Button";
+import {RequestStatusType} from "../../../App/app-reducer";
 
 type TodolistPropsType = {
     todolistId: string
@@ -20,11 +21,13 @@ type TodolistPropsType = {
     filter: FilterType
     removeTodolist: (todolistId: string) => void
     changeTitleTodolist: (title: string, todolistId: string) => void
+    entityStatus: RequestStatusType
 }
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
     const dispatch = useDispatch();
     let tasks = useSelector<AppRootType, Array<TaskType>>(state => state.tasks[props.todolistId])
+    const toCheckStatus = props.entityStatus === "loading"
 
     useEffect(() => {
         dispatch(setTasksTC(props.todolistId))
@@ -58,11 +61,12 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
         <div className='todoList'>
             <Typography align={'center'} variant={'h5'} style={{fontWeight: 'bold'}}>
                 <EditableSpan title={props.title} onChange={onChangeTodolistTitleHandler}/>
-                <IconButton onClick={() => props.removeTodolist(props.todolistId)} aria-label="delete">
+                <IconButton disabled={toCheckStatus}
+                            onClick={() => props.removeTodolist(props.todolistId)} aria-label="delete">
                     <Delete/>
                 </IconButton>
             </Typography>
-            <AddItemForm addItem={addTask}/>
+            <AddItemForm addItem={addTask} disabled={toCheckStatus}/>
             <div>
                 <List>
                     {tasksJSXElement}
