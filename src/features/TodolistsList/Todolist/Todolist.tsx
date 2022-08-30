@@ -60,7 +60,7 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     return (
         <div className='todoList'>
             <Typography align={'center'} variant={'h5'} style={{fontWeight: 'bold'}}>
-                <EditableSpan title={props.title} onChange={onChangeTodolistTitleHandler}/>
+                <EditableSpan title={props.title} onChange={onChangeTodolistTitleHandler} disabled={toCheckStatus}/>
                 <IconButton disabled={toCheckStatus}
                             onClick={() => props.removeTodolist(props.todolistId)} aria-label="delete">
                     <Delete/>

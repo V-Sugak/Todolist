@@ -7,6 +7,7 @@ import {Edit} from "@mui/icons-material";
 type EditableSpanPropsType = {
     title: string
     onChange: (title: string) => void
+    disabled?: boolean
 }
 
 export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
@@ -31,6 +32,7 @@ export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
             activeViewMode()
         }
     }
+    const toCheckDisabled = props.disabled ? activeViewMode: activeEditMode
 
     return (
         editMode ?
@@ -41,9 +43,9 @@ export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
                        style={{width: '150px'}}
                        onKeyPress={onKeyPressInput}
             />
-            : <span onDoubleClick={activeEditMode}>
+            : <span onDoubleClick={toCheckDisabled}>
                 {props.title}
-                <IconButton onClick={activeEditMode} size={"small"}>
+                <IconButton onClick={toCheckDisabled} size={"small"}>
                    <Edit style={{fontSize: 18}}/>
                 </IconButton>
             </span>

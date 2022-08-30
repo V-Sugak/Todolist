@@ -2,6 +2,7 @@ import {todoListsApi, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {AppActionsType, RequestStatusType, setAppErrorAC, setAppStatusAC} from "../../App/app-reducer";
 import {AxiosError} from "axios";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -59,10 +60,6 @@ export const setTodoListsTC = () => (dispatch: Dispatch<ActionsType>) => {
             dispatch(setTodoListsAC(res.data))
             dispatch(setAppStatusAC("succeeded"))
         })
-        .catch((error: AxiosError) => {
-            dispatch(setAppErrorAC(error.message))
-            dispatch(setAppStatusAC("failed"))
-        })
 }
 export const removeTodoListTC = (todoListId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC("loading"))
@@ -73,17 +70,11 @@ export const removeTodoListTC = (todoListId: string) => (dispatch: Dispatch<Acti
                 dispatch(removeTodolistAC(todoListId))
                 dispatch(setAppStatusAC("succeeded"))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC("Some error"))
-                }
-                dispatch(setAppStatusAC("failed"))
+                handleServerAppError(dispatch, res.data)
             }
         })
         .catch((error: AxiosError) => {
-            dispatch(setAppErrorAC(error.message))
-            dispatch(setAppStatusAC("failed"))
+            handleServerNetworkError(dispatch, error.message)
             dispatch(setEntityStatusAC("failed", todoListId))
         })
 }
@@ -95,18 +86,12 @@ export const addTodoListTC = (title: string) => (dispatch: Dispatch<ActionsType>
                     dispatch(addTodolistAC(res.data.data.item))
                     dispatch(setAppStatusAC("succeeded"))
                 } else {
-                    if (res.data.messages.length) {
-                        dispatch(setAppErrorAC(res.data.messages[0]))
-                    } else {
-                        dispatch(setAppErrorAC("Some error"))
-                    }
-                    dispatch(setAppStatusAC("failed"))
+                    handleServerAppError(dispatch, res.data)
                 }
             }
         )
         .catch((error: AxiosError) => {
-            dispatch(setAppErrorAC(error.message))
-            dispatch(setAppStatusAC("failed"))
+            handleServerNetworkError(dispatch, error.message)
         })
 }
 export const changeTodolistTitleTC = (todoListId: string, title: string) => (dispatch: Dispatch<ActionsType>) => {
@@ -117,17 +102,11 @@ export const changeTodolistTitleTC = (todoListId: string, title: string) => (dis
                 dispatch(changeTodolistTitleAC(todoListId, title))
                 dispatch(setAppStatusAC("succeeded"))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setAppErrorAC("Some error"))
-                }
-                dispatch(setAppStatusAC("failed"))
+                handleServerAppError(dispatch, res.data)
             }
         })
         .catch((error: AxiosError) => {
-            dispatch(setAppErrorAC(error.message))
-            dispatch(setAppStatusAC("failed"))
+            handleServerNetworkError(dispatch, error.message)
         })
 }
 

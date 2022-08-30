@@ -4,6 +4,7 @@ import {Dispatch} from "redux";
 import {AppRootType} from "../../App/store";
 import {AppActionsType, setAppErrorAC, setAppStatusAC} from "../../App/app-reducer";
 import {AxiosError} from "axios";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: TasksStateType = {}
 
@@ -79,10 +80,6 @@ export const setTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsTyp
             dispatch(setTasksAC(res.data.items, todolistId))
             dispatch(setAppStatusAC("succeeded"))
         })
-        .catch((error: AxiosError) => {
-            dispatch(setAppErrorAC(error.message))
-            dispatch(setAppStatusAC("failed"))
-        })
 }
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC("loading"))
@@ -92,22 +89,12 @@ export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: D
                 dispatch(removeTaskAC(taskId, todolistId))
                 dispatch(setAppStatusAC("succeeded"))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    if (res.data.messages.length) {
-                        dispatch(setAppErrorAC(res.data.messages[0]))
-                    } else {
-                        dispatch(setAppErrorAC("Some error"))
-                    }
-                    dispatch(setAppStatusAC("failed"))
-                }
+                handleServerAppError(dispatch, res.data)
             }
 
         })
         .catch((error: AxiosError) => {
-            dispatch(setAppErrorAC(error.message))
-            dispatch(setAppStatusAC("failed"))
+            handleServerNetworkError(dispatch, error.message)
         })
 }
 export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<ActionsType>) => {
@@ -121,18 +108,12 @@ export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispa
                 if (res.data.messages.length) {
                     dispatch(setAppErrorAC(res.data.messages[0]))
                 } else {
-                    if (res.data.messages.length) {
-                        dispatch(setAppErrorAC(res.data.messages[0]))
-                    } else {
-                        dispatch(setAppErrorAC("Some error"))
-                    }
-                    dispatch(setAppStatusAC("failed"))
+                    handleServerAppError(dispatch, res.data)
                 }
             }
         })
         .catch((error: AxiosError) => {
-            dispatch(setAppErrorAC(error.message))
-            dispatch(setAppStatusAC("failed"))
+            handleServerNetworkError(dispatch, error.message)
         })
 }
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
@@ -155,17 +136,11 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelT
                         dispatch(updateTaskAC(taskId, domainModel, todolistId))
                         dispatch(setAppStatusAC("succeeded"))
                     } else {
-                        if (res.data.messages.length) {
-                            dispatch(setAppErrorAC(res.data.messages[0]))
-                        } else {
-                            dispatch(setAppErrorAC("Some error"))
-                        }
-                        dispatch(setAppStatusAC("failed"))
+                        handleServerAppError(dispatch, res.data)
                     }
                 })
                 .catch((error: AxiosError) => {
-                    dispatch(setAppErrorAC(error.message))
-                    dispatch(setAppStatusAC("failed"))
+                    handleServerNetworkError(dispatch, error.message)
                 })
         }
     }
