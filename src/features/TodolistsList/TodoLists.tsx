@@ -36,7 +36,7 @@ export const TodoLists = (props: TodoListsPropsType) => {
         <Grid container style={{padding: "20px 0"}}>
             <AddItemForm addItem={addTodolist}/>
         </Grid>
-        <Grid container spacing={4}>
+        <Grid container spacing={3}>
             {todoLists.map(tl => {
                 return (
                     <Grid item key={tl.id}>
