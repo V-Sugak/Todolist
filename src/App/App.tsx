@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./App.css";
 import {TodoLists} from "../features/TodolistsList/TodoLists";
 import {useAppSelector} from "./store";
@@ -13,9 +13,16 @@ import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Login} from "../features/Login/Login";
 import {Navigate, Route, Routes} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {initializeAppTC} from "./app-reducer";
 
 function App() {
     const status = useAppSelector(state => state.app.status)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, [])
 
     return (
         <div className="App">

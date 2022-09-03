@@ -17,6 +17,6 @@ export const handleServerAppError = <T>(dispatch: Dispatch<AppActionsType>, data
         } else {
             dispatch(setAppErrorAC("Some error"))
         }
-        dispatch(setAppStatusAC("failed"))
     }
+    dispatch(setAppStatusAC("failed"))
 }

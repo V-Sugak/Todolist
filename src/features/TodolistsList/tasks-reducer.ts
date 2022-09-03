@@ -80,6 +80,9 @@ export const setTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsTyp
             dispatch(setTasksAC(res.data.items, todolistId))
             dispatch(setAppStatusAC("succeeded"))
         })
+        .catch((error:AxiosError) => {
+            handleServerNetworkError(dispatch, error.message)
+        })
 }
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC("loading"))
@@ -105,11 +108,7 @@ export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispa
                 dispatch(addTaskAC(res.data.data.item))
                 dispatch(setAppStatusAC("succeeded"))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setAppErrorAC(res.data.messages[0]))
-                } else {
-                    handleServerAppError(dispatch, res.data)
-                }
+                handleServerAppError(dispatch, res.data)
             }
         })
         .catch((error: AxiosError) => {

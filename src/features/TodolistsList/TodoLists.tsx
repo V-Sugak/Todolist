@@ -4,20 +4,26 @@ import {
     addTodoListTC,
     changeTodolistFilterAC,
     changeTodolistTitleTC,
-    FilterType, removeTodoListTC, setTodoListsTC,
-    TodolistDomainType
+    FilterType,
+    removeTodoListTC,
+    setTodoListsTC
 } from "./todolists-reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootType} from "../../App/store";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../App/store";
 import {Grid, Paper} from "@mui/material";
+import {Navigate} from "react-router-dom";
 
-export const TodoLists = (props: TodoListsPropsType) => {
+export const TodoLists = () => {
     const dispatch = useDispatch();
-    const todoLists = useSelector<AppRootType, Array<TodolistDomainType>>(state => state.todoLists)
+    const todoLists = useAppSelector(state => state.todoLists)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
     useEffect(() => {
-        dispatch(setTodoListsTC())
-    }, [dispatch])
+        if (isLoggedIn) {
+            dispatch(setTodoListsTC())
+        }
+    }, [])
 
     const changeFilter = useCallback((filter: FilterType, todolistId: string) => {
         dispatch(changeTodolistFilterAC(filter, todolistId))
@@ -31,6 +37,10 @@ export const TodoLists = (props: TodoListsPropsType) => {
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodoListTC(title))
     }, [dispatch])
+
+    if (!isLoggedIn) {
+        return <Navigate to={"login"}/>
+    }
 
     return <>
         <Grid container style={{padding: "20px 0"}}>
@@ -60,5 +70,3 @@ export const TodoLists = (props: TodoListsPropsType) => {
     </>
 
 }
-
-type TodoListsPropsType = {}
