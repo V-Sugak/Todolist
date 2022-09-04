@@ -2,7 +2,7 @@ import {todoListsApi, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {AppActionsType, RequestStatusType, setAppErrorAC, setAppStatusAC} from "../../App/app-reducer";
 import {AxiosError} from "axios";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {ActionsErrorType, handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -60,7 +60,7 @@ export const setTodoListsTC = () => (dispatch: Dispatch<ActionsType>) => {
             dispatch(setTodoListsAC(res.data))
             dispatch(setAppStatusAC("succeeded"))
         })
-        .catch((error:AxiosError) => {
+        .catch((error: AxiosError) => {
             handleServerNetworkError(dispatch, error.message)
         })
 }
@@ -126,4 +126,4 @@ export type ActionsType =
     | ReturnType<typeof changeTodolistFilterAC>
     | ReturnType<typeof setTodoListsAC>
     | ReturnType<typeof setEntityStatusAC>
-    | AppActionsType
+    | ActionsErrorType

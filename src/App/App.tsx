@@ -2,27 +2,42 @@ import React, {useEffect} from "react";
 import "./App.css";
 import {TodoLists} from "../features/TodolistsList/TodoLists";
 import {useAppSelector} from "./store";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import {Menu} from '@mui/icons-material';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import {Menu} from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Login} from "../features/Login/Login";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {initializeAppTC} from "./app-reducer";
+import {CircularProgress} from "@mui/material";
+import {logoutTC} from "../features/Login/auth-reducer";
 
 function App() {
     const status = useAppSelector(state => state.app.status)
+    const isInitialized = useAppSelector(state => state.app.isInitialized)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(initializeAppTC())
     }, [])
+
+    const logoutHandler = () => {
+        dispatch(logoutTC())
+    }
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
     return (
         <div className="App">
@@ -35,7 +50,7 @@ function App() {
                     <Typography variant={"h6"}>
                         Todolist
                     </Typography>
-                    <Button variant="outlined" color={"inherit"}>Login</Button>
+                    {isLoggedIn && <Button onClick={logoutHandler} variant="outlined" color={"inherit"}>Logout</Button>}
                 </Toolbar>
             </AppBar>
             {status === "loading" && <LinearProgress color="secondary"/>}

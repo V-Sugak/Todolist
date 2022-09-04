@@ -1,10 +1,13 @@
 import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 import {authApi} from "../api/auth-api";
 import {Dispatch} from "redux";
+import {AxiosError} from "axios";
+import {handleServerNetworkError} from "../utils/error-utils";
 
 const initialState = {
     status: 'idle' as RequestStatusType,
-    error: null as null | string
+    error: null as null | string,
+    isInitialized: false,
 }
 
 export const appReducer = (state: InitialStateType = initialState, action: AppActionsType): InitialStateType => {
@@ -13,6 +16,8 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
             return {...state, status: action.status}
         case "APP/SET-ERROR":
             return {...state, error: action.error}
+        case "APP/IS-INITIALIZED":
+            return {...state, isInitialized: action.isInitialized}
         default:
             return state
     }
@@ -20,15 +25,21 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
 //actions
 export const setAppStatusAC = (status: RequestStatusType) => ({type: "APP/SET-STATUS", status} as const)
 export const setAppErrorAC = (error: null | string) => ({type: "APP/SET-ERROR", error} as const)
+export const setIsInitializedAC = (isInitialized: boolean) => ({type: "APP/IS-INITIALIZED", isInitialized} as const)
 
 //thunks
 export const initializeAppTC = () => (dispatch: Dispatch<AppActionsType>) => {
     authApi.authMe()
         .then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC(true));
-            } else {
+                dispatch(setIsLoggedInAC(true))
             }
+        })
+        .catch((error: AxiosError) => {
+            handleServerNetworkError(dispatch, error.message)
+        })
+        .finally(() => {
+            dispatch(setIsInitializedAC(true))
         })
 }
 
@@ -39,3 +50,4 @@ export type AppActionsType =
     | ReturnType<typeof setAppStatusAC>
     | ReturnType<typeof setAppErrorAC>
     | ReturnType<typeof setIsLoggedInAC>
+    | ReturnType<typeof setIsInitializedAC>

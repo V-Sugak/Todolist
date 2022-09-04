@@ -4,7 +4,7 @@ import {Dispatch} from "redux";
 import {AppRootType} from "../../App/store";
 import {AppActionsType, setAppErrorAC, setAppStatusAC} from "../../App/app-reducer";
 import {AxiosError} from "axios";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {ActionsErrorType, handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: TasksStateType = {}
 
@@ -80,7 +80,7 @@ export const setTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsTyp
             dispatch(setTasksAC(res.data.items, todolistId))
             dispatch(setAppStatusAC("succeeded"))
         })
-        .catch((error:AxiosError) => {
+        .catch((error: AxiosError) => {
             handleServerNetworkError(dispatch, error.message)
         })
 }
@@ -165,7 +165,7 @@ export type ActionsType =
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof updateTaskAC>
     | ReturnType<typeof setEntityStatusAC>
-    | AppActionsType
+    | ActionsErrorType
 
 
 
