@@ -1,17 +1,17 @@
-import {Dispatch} from 'redux'
-import {AppActionsType, setAppErrorAC, setAppStatusAC} from "../../App/app-reducer";
+import {setAppStatusAC} from "../../App/app-reducer";
 import {authApi, LoginParamsType} from "../../api/auth-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {AxiosError} from "axios";
+import {ThunkType} from "../../App/store";
 
 const initialState = {
     isLoggedIn: false
 }
 type InitialStateType = typeof initialState
 
-export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+export const authReducer = (state: InitialStateType = initialState, action: AuthActionsType): InitialStateType => {
     switch (action.type) {
-        case 'login/SET-IS-LOGGED-IN':
+        case 'AUTH/SET-IS-LOGGED-IN':
             return {...state, isLoggedIn: action.value}
         default:
             return state
@@ -19,10 +19,10 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
 }
 // actions
 export const setIsLoggedInAC = (value: boolean) =>
-    ({type: 'login/SET-IS-LOGGED-IN', value} as const)
+    ({type: 'AUTH/SET-IS-LOGGED-IN', value} as const)
 
 // thunks
-export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsType>) => {
+export const loginTC = (data: LoginParamsType): ThunkType => (dispatch) => {
     dispatch(setAppStatusAC('loading'))
     authApi.login(data)
         .then((res) => {
@@ -37,7 +37,7 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsTyp
             handleServerNetworkError(dispatch, error.message)
         })
 }
-export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
+export const logoutTC = (): ThunkType => (dispatch) => {
     dispatch(setAppStatusAC('loading'))
     authApi.logout()
         .then(res => {
@@ -54,4 +54,4 @@ export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
 }
 
 // types
-type ActionsType = ReturnType<typeof setIsLoggedInAC> | AppActionsType
+export type AuthActionsType = ReturnType<typeof setIsLoggedInAC>

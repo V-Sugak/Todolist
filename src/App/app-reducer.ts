@@ -1,8 +1,8 @@
 import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 import {authApi} from "../api/auth-api";
-import {Dispatch} from "redux";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../utils/error-utils";
+import {ThunkType} from "./store";
 
 const initialState = {
     status: 'idle' as RequestStatusType,
@@ -28,7 +28,7 @@ export const setAppErrorAC = (error: null | string) => ({type: "APP/SET-ERROR", 
 export const setIsInitializedAC = (isInitialized: boolean) => ({type: "APP/IS-INITIALIZED", isInitialized} as const)
 
 //thunks
-export const initializeAppTC = () => (dispatch: Dispatch<AppActionsType>) => {
+export const initializeAppTC = (): ThunkType => (dispatch) => {
     authApi.authMe()
         .then(res => {
             if (res.data.resultCode === 0) {
@@ -49,5 +49,4 @@ export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
 export type AppActionsType =
     | ReturnType<typeof setAppStatusAC>
     | ReturnType<typeof setAppErrorAC>
-    | ReturnType<typeof setIsLoggedInAC>
     | ReturnType<typeof setIsInitializedAC>

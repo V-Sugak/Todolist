@@ -29,10 +29,6 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     let tasks = useAppSelector(state => state.tasks[props.todolistId])
     const toCheckStatus = props.entityStatus === "loading"
 
-    useEffect(() => {
-        dispatch(setTasksTC(props.todolistId))
-    }, [props.todolistId])
-
     if (props.filter === "active") {
         tasks = tasks.filter(t => t.status === TaskStatuses.New)
     }

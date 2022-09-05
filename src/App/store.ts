@@ -1,10 +1,10 @@
 import {applyMiddleware, combineReducers, createStore} from "redux";
-import {tasksReducer} from "../features/TodolistsList/tasks-reducer";
-import {todolistsReducer} from "../features/TodolistsList/todolists-reducer";
-import thunk from "redux-thunk";
-import {appReducer} from "./app-reducer";
+import {TasksActionsType, tasksReducer} from "../features/TodolistsList/tasks-reducer";
+import {TodolistsActionsType, todolistsReducer} from "../features/TodolistsList/todolists-reducer";
+import thunk, {ThunkAction} from "redux-thunk";
+import {AppActionsType, appReducer} from "./app-reducer";
 import {TypedUseSelectorHook, useSelector} from "react-redux";
-import {authReducer} from "../features/Login/auth-reducer";
+import {AuthActionsType, authReducer} from "../features/Login/auth-reducer";
 
 const rootReducer = combineReducers({
     app: appReducer,
@@ -13,10 +13,13 @@ const rootReducer = combineReducers({
     auth: authReducer,
 })
 
-export type AppRootType = ReturnType<typeof rootReducer>
-
 export const store = createStore(rootReducer, applyMiddleware(thunk))
-
 export const useAppSelector: TypedUseSelectorHook<AppRootType> = useSelector
+
+//types
+export type AppRootType = ReturnType<typeof rootReducer>
+export type RootActionsType = AppActionsType | TodolistsActionsType | TasksActionsType | AuthActionsType
+export type ThunkType<ReturnType = void> = ThunkAction<ReturnType, AppRootType, unknown, RootActionsType>
+
 // @ts-ignore
 window.store = store
