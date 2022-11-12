@@ -1,4 +1,3 @@
-import {useDispatch} from "react-redux";
 import {removeTaskTC, updateTaskTC} from "../../tasks-reducer";
 import React, {ChangeEvent, useCallback} from "react";
 import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
@@ -7,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Checkbox from "@mui/material/Checkbox";
 import {ListItem} from "@mui/material";
 import {Delete} from "@mui/icons-material";
+import {useAppDispatch} from "../../../../App/hooks/hooks";
 
 type TaskPropsType = {
     todolistId: string
@@ -14,7 +14,7 @@ type TaskPropsType = {
 }
 
 export const Task = React.memo((props: TaskPropsType) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const removeTask = () => {
         dispatch(removeTaskTC(props.task.id, props.todolistId));
     }

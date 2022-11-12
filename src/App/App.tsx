@@ -1,7 +1,6 @@
 import React, {useEffect} from "react";
 import "./App.css";
 import {TodoLists} from "../features/TodolistsList/TodoLists";
-import {useAppSelector} from "./store";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -13,16 +12,16 @@ import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Login} from "../features/Login/Login";
 import {Navigate, Route, Routes} from "react-router-dom";
-import {useDispatch} from "react-redux";
 import {initializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
 import {logoutTC} from "../features/Login/auth-reducer";
+import {useAppDispatch, useAppSelector} from "./hooks/hooks";
 
 function App() {
     const status = useAppSelector(state => state.app.status)
     const isInitialized = useAppSelector(state => state.app.isInitialized)
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         dispatch(initializeAppTC())

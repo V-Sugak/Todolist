@@ -3,7 +3,7 @@ import {RequestStatusType, setAppStatusAC} from "../../App/app-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {setTasksTC} from "./tasks-reducer";
-import {ThunkType} from "../../App/store";
+import {Dispatch} from "redux";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -54,7 +54,7 @@ export const setEntityStatusAC = (entityStatus: RequestStatusType, todolistId: s
 } as const)
 
 //thunks
-export const setTodoListsTC = (): ThunkType => (dispatch) => {
+export const setTodoListsTC = () => (dispatch: Dispatch<any>) => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.getTodoLists()
         .then(res => {
@@ -71,7 +71,7 @@ export const setTodoListsTC = (): ThunkType => (dispatch) => {
             handleServerNetworkError(dispatch, error.message)
         })
 }
-export const removeTodoListTC = (todoListId: string): ThunkType => (dispatch) => {
+export const removeTodoListTC = (todoListId: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("loading"))
     dispatch(setEntityStatusAC("loading", todoListId))
     todoListsApi.deleteTodoList(todoListId)
@@ -88,7 +88,7 @@ export const removeTodoListTC = (todoListId: string): ThunkType => (dispatch) =>
             dispatch(setEntityStatusAC("failed", todoListId))
         })
 }
-export const addTodoListTC = (title: string): ThunkType => (dispatch) => {
+export const addTodoListTC = (title: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.creatTodoList(title)
         .then(res => {
@@ -104,7 +104,7 @@ export const addTodoListTC = (title: string): ThunkType => (dispatch) => {
             handleServerNetworkError(dispatch, error.message)
         })
 }
-export const changeTodolistTitleTC = (todoListId: string, title: string): ThunkType => (dispatch) => {
+export const changeTodolistTitleTC = (todoListId: string, title: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.updateTodoList(todoListId, title)
         .then(res => {

@@ -9,13 +9,12 @@ import {
     setTodoListsTC
 } from "./todolists-reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../../App/store";
 import {Grid, Paper} from "@mui/material";
 import {Navigate} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../App/hooks/hooks";
 
 export const TodoLists = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const todoLists = useAppSelector(state => state.todoLists)
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 

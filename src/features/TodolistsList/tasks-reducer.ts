@@ -1,9 +1,10 @@
 import {addTodolistAC, removeTodolistAC, setTodoListsAC} from "./todolists-reducer";
 import {TaskType, todoListsApi, UpdateTaskModelType} from "../../api/todolists-api";
-import {AppRootType, ThunkType} from "../../App/store";
+import {RootState} from "../../App/store";
 import {setAppStatusAC} from "../../App/app-reducer";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {Dispatch} from "redux";
 
 const initialState: TasksStateType = {}
 
@@ -72,7 +73,7 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) => ({
 } as const)
 
 //thunks
-export const setTasksTC = (todolistId: string): ThunkType => (dispatch) => {
+export const setTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.getTasks(todolistId)
         .then(res => {
@@ -83,7 +84,7 @@ export const setTasksTC = (todolistId: string): ThunkType => (dispatch) => {
             handleServerNetworkError(dispatch, error.message)
         })
 }
-export const removeTaskTC = (taskId: string, todolistId: string): ThunkType => (dispatch) => {
+export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.deleteTask(taskId, todolistId)
         .then(res => {
@@ -99,7 +100,7 @@ export const removeTaskTC = (taskId: string, todolistId: string): ThunkType => (
             handleServerNetworkError(dispatch, error.message)
         })
 }
-export const addTaskTC = (todolistId: string, title: string): ThunkType => (dispatch) => {
+export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("loading"))
     todoListsApi.createTask(todolistId, title)
         .then(res => {
@@ -114,8 +115,8 @@ export const addTaskTC = (todolistId: string, title: string): ThunkType => (disp
             handleServerNetworkError(dispatch, error.message)
         })
 }
-export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string): ThunkType =>
-    (dispatch, getState: () => AppRootType) => {
+export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
+    (dispatch: Dispatch, getState: () => RootState) => {
         const task = getState().tasks[todolistId].find(t => t.id === taskId)
         if (task) {
             const model: UpdateTaskModelType = {
