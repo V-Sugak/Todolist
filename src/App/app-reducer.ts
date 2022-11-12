@@ -3,29 +3,30 @@ import {authApi} from "../api/auth-api";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../utils/error-utils";
 import {Dispatch} from "redux";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState = {
-    status: 'idle' as RequestStatusType,
-    error: null as null | string,
-    isInitialized: false,
-}
-
-export const appReducer = (state: InitialStateType = initialState, action: AppActionsType): InitialStateType => {
-    switch (action.type) {
-        case "APP/SET-STATUS":
-            return {...state, status: action.status}
-        case "APP/SET-ERROR":
-            return {...state, error: action.error}
-        case "APP/IS-INITIALIZED":
-            return {...state, isInitialized: action.isInitialized}
-        default:
-            return state
+const slice = createSlice({
+    name: "app",
+    initialState: {
+        status: 'idle' as RequestStatusType,
+        error: null as null | string,
+        isInitialized: false,
+    },
+    reducers: {
+        setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
+            state.status = action.payload.status
+        },
+        setAppErrorAC(state, action: PayloadAction<{ error: string | null}>) {
+            state.error = action.payload.error
+        },
+        setIsInitializedAC(state, action: PayloadAction<{ isInitialized: boolean }>) {
+            state.isInitialized = action.payload.isInitialized
+        }
     }
-}
-//actions
-export const setAppStatusAC = (status: RequestStatusType) => ({type: "APP/SET-STATUS", status} as const)
-export const setAppErrorAC = (error: null | string) => ({type: "APP/SET-ERROR", error} as const)
-export const setIsInitializedAC = (isInitialized: boolean) => ({type: "APP/IS-INITIALIZED", isInitialized} as const)
+})
+
+export const appReducer = slice.reducer
+export const {setAppStatusAC, setAppErrorAC, setIsInitializedAC} = slice.actions
 
 //thunks
 export const initializeAppTC = () => (dispatch: Dispatch) => {
@@ -39,14 +40,10 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
             handleServerNetworkError(dispatch, error.message)
         })
         .finally(() => {
-            dispatch(setIsInitializedAC(true))
+            dispatch(setIsInitializedAC({isInitialized:true}))
         })
 }
 
 //types
-type InitialStateType = typeof initialState
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
-export type AppActionsType =
-    | ReturnType<typeof setAppStatusAC>
-    | ReturnType<typeof setAppErrorAC>
-    | ReturnType<typeof setIsInitializedAC>
+
