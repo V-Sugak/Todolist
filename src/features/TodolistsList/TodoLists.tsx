@@ -24,11 +24,11 @@ export const TodoLists = () => {
         }
     }, [])
 
-    const changeFilter = useCallback((filter: FilterType, todolistId: string) => {
-        dispatch(changeTodolistFilterAC(filter, todolistId))
+    const changeFilter = useCallback((filter: FilterType, todoListId: string) => {
+        dispatch(changeTodolistFilterAC({filter,todoListId}))
     }, [dispatch])
-    const changeTitleTodolist = useCallback((title: string, todolistId: string) => {
-        dispatch(changeTodolistTitleTC(todolistId, title))
+    const changeTitleTodolist = useCallback((title: string, todoListId: string) => {
+        dispatch(changeTodolistTitleTC(todoListId, title))
     }, [dispatch])
     const removeTodolist = useCallback((todoListId: string) => {
         dispatch(removeTodoListTC(todoListId))
