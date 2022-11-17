@@ -16,7 +16,7 @@ type TaskPropsType = {
 export const Task = React.memo((props: TaskPropsType) => {
     const dispatch = useAppDispatch();
     const removeTask = () => {
-        dispatch(removeTaskTC(props.task.id, props.todolistId));
+        dispatch(removeTaskTC({taskId: props.task.id, todoListId: props.todolistId}));
     }
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
