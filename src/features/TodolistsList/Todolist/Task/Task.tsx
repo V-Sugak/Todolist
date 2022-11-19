@@ -20,10 +20,10 @@ export const Task = React.memo((props: TaskPropsType) => {
     }
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
-        dispatch(updateTaskTC(props.task.id, {status}, props.todolistId));
+        dispatch(updateTaskTC({taskId: props.task.id, domainModel: {status}, todoListId: props.todolistId}));
     }
     const onChangeTitleHandler = useCallback((title: string) => {
-        dispatch(updateTaskTC(props.task.id, {title}, props.todolistId))
+        dispatch(updateTaskTC({taskId: props.task.id, domainModel: {title}, todoListId: props.todolistId}))
     }, [dispatch, props.task.id, props.todolistId])
 
     return (
