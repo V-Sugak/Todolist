@@ -33,7 +33,7 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
     authApi.authMe()
         .then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC({value: true}))
+                dispatch(setIsLoggedInAC({isLoggedIn: true}))
             }
         })
         .catch((error: AxiosError) => {
