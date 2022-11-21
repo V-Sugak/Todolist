@@ -2,8 +2,25 @@ import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 import {authApi} from "../api/auth-api";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../utils/error-utils";
-import {Dispatch} from "redux";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+
+//thunks
+export const initializeAppTC = createAsyncThunk("app/initializeApp",
+    async (param, {dispatch, rejectWithValue}) => {
+        try {
+            const res = await authApi.authMe()
+            if (res.data.resultCode === 0) {
+                dispatch(setIsLoggedInAC({isLoggedIn: true}))
+                return
+            }
+            rejectWithValue(null)
+        } catch (err) {
+            const error: AxiosError = err as any
+            handleServerNetworkError(dispatch, error.message)
+            dispatch(setIsInitializedAC({isInitialized: true}))
+            rejectWithValue(null)
+        }
+    })
 
 const slice = createSlice({
     name: "app",
@@ -16,33 +33,22 @@ const slice = createSlice({
         setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
             state.status = action.payload.status
         },
-        setAppErrorAC(state, action: PayloadAction<{ error: string | null}>) {
+        setAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
             state.error = action.payload.error
         },
         setIsInitializedAC(state, action: PayloadAction<{ isInitialized: boolean }>) {
             state.isInitialized = action.payload.isInitialized
         }
-    }
+    },
+    extraReducers: (builder => {
+        builder.addCase(initializeAppTC.fulfilled, (state, action) => {
+            state.isInitialized = true
+        })
+    })
 })
 
 export const appReducer = slice.reducer
 export const {setAppStatusAC, setAppErrorAC, setIsInitializedAC} = slice.actions
-
-//thunks
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-    authApi.authMe()
-        .then(res => {
-            if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC({isLoggedIn: true}))
-            }
-        })
-        .catch((error: AxiosError) => {
-            handleServerNetworkError(dispatch, error.message)
-        })
-        .finally(() => {
-            dispatch(setIsInitializedAC({isInitialized:true}))
-        })
-}
 
 //types
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
