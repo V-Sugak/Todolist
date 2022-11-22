@@ -1,7 +1,7 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
-import {addTaskTC} from "../tasks-reducer";
+import {addTaskTC, setTasksTC} from "../tasks-reducer";
 import {Task} from "./Task/Task";
 import {FilterType} from "../todolists-reducer";
 import {TaskStatuses} from "../../../api/todolists-api";
@@ -25,6 +25,10 @@ type TodolistPropsType = {
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
     const dispatch = useAppDispatch();
+    useEffect(() => {
+        const thunk = setTasksTC(props.todolistId)
+        dispatch(thunk)
+    }, [])
     let tasks = useAppSelector(state => state.tasks[props.todolistId])
     const toCheckStatus = props.entityStatus === "loading"
 

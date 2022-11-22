@@ -1,6 +1,6 @@
 import {addTaskTC, removeTaskTC, setTasksTC, tasksReducer, TasksStateType, updateTaskTC} from "./tasks-reducer";
 import {TaskPriorities, TaskStatuses, TaskType, TodoListType} from "../../api/todolists-api";
-import {addTodolistAC, removeTodolistAC, setTodoListsAC} from "./todolists-reducer";
+import {addTodoListTC, removeTodoListTC, setTodoListsTC} from "./todolists-reducer";
 
 let startState: TasksStateType;
 beforeEach(() => {
@@ -208,7 +208,7 @@ test("title of specified task should be changed", () => {
 
 test("new array should be added when new todolist is added", () => {
     let todolist = {id: "todolistId3", title: "New Todolist", filter: "all", addedDate: "", order: 0}
-    const endState = tasksReducer(startState, addTodolistAC({todolist}))
+    const endState = tasksReducer(startState, addTodoListTC.fulfilled({todolist}, "", todolist.title))
 
     const keys = Object.keys(endState);
     const newKey = keys.find(k => k != "todolistId1" && k != "todolistId2");
@@ -221,7 +221,7 @@ test("new array should be added when new todolist is added", () => {
 });
 
 test("property with todolistId should be deleted", () => {
-    const action = removeTodolistAC({todoListId: "todolistId2"});
+    const action = removeTodoListTC.fulfilled({todoListId: "todolistId2"}, "", "todolistId2");
     const endState = tasksReducer(startState, action)
     const keys = Object.keys(endState);
 
@@ -234,7 +234,7 @@ test("todo-lists should be set to the state ", () => {
         {id: "Id1", title: "What to learn", addedDate: "", order: 0},
         {id: "Id2", title: "What to buy", addedDate: "", order: 0}
     ];
-    const endState = tasksReducer({}, setTodoListsAC({todoLists}));
+    const endState = tasksReducer({}, setTodoListsTC.fulfilled({todoLists}, ""));
 
     expect(endState["Id1"]).toEqual([]);
     expect(endState["Id2"]).toEqual([]);

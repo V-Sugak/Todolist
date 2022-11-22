@@ -13,12 +13,11 @@ export const initializeAppTC = createAsyncThunk("app/initializeApp",
                 dispatch(setIsLoggedInAC({isLoggedIn: true}))
                 return
             }
-            rejectWithValue(null)
         } catch (err) {
             const error: AxiosError = err as any
             handleServerNetworkError(dispatch, error.message)
             dispatch(setIsInitializedAC({isInitialized: true}))
-            rejectWithValue(null)
+            return rejectWithValue(null)
         }
     })
 
