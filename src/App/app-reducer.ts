@@ -1,4 +1,4 @@
-import {setIsLoggedInAC} from "../features/Login/auth-reducer";
+import {setIsLoggedInAC} from "../features/Auth/auth-reducer";
 import {authApi} from "../api/auth-api";
 import {AxiosError} from "axios";
 import {handleServerNetworkError} from "../utils/error-utils";

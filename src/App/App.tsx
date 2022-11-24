@@ -10,17 +10,19 @@ import Container from "@mui/material/Container";
 import {Menu} from "@mui/icons-material";
 import LinearProgress from "@mui/material/LinearProgress";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {Login} from "../features/Login/Login";
+import {Login} from "../features/Auth/Login";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {initializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
-import {logoutTC} from "../features/Login/auth-reducer";
+import {logoutTC} from "../features/Auth/auth-reducer";
 import {useAppDispatch, useAppSelector} from "./hooks/hooks";
+import {appSelectors} from "./index";
+import {authSelectors} from "../features/Auth";
 
 function App() {
-    const status = useAppSelector(state => state.app.status)
-    const isInitialized = useAppSelector(state => state.app.isInitialized)
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const status = useAppSelector(appSelectors.selectStatus)
+    const isInitialized = useAppSelector(appSelectors.selectIsInitialized)
+    const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
