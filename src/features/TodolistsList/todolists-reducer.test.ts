@@ -1,13 +1,11 @@
 import {v1} from "uuid";
 import {
-    addTodoListTC,
-    changeTodolistFilterAC, changeTodolistTitleTC,
-    FilterType, removeTodoListTC,
-    setTodoListsTC,
-    TodolistDomainType,
+    changeTodolistFilterAC,
+    FilterType, TodolistDomainType,
     todolistsReducer
 } from "./todolists-reducer";
 import {TodoListType} from "../../api/todolists-api";
+import {addTodoListTC, changeTodolistTitleTC, removeTodoListTC, setTodoListsTC} from "./todolists-actions";
 
 let startState: Array<TodolistDomainType>;
 let todolistId1: string;
@@ -42,7 +40,7 @@ test("correct todolist should change its name", () => {
     let title = "New Todolist";
 
     const param = {title, todoListId: todolistId2};
-    const endState = todolistsReducer(startState, changeTodolistTitleTC.fulfilled(param,"",param));
+    const endState = todolistsReducer(startState, changeTodolistTitleTC.fulfilled(param, "", param));
 
     expect(endState[0].title).toBe("What to learn");
     expect(endState[1].title).toBe(title);

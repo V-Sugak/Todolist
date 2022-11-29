@@ -1,4 +1,3 @@
-import {removeTaskTC, updateTaskTC} from "../../tasks-reducer";
 import React, {ChangeEvent, useCallback} from "react";
 import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import {TaskStatuses, TaskType} from "../../../../api/todolists-api";
@@ -7,6 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import {ListItem} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 import {useAppDispatch} from "../../../../App/hooks/hooks";
+import {removeTaskTC, updateTaskTC} from "../../tasks-actions";
 
 type TaskPropsType = {
     todolistId: string

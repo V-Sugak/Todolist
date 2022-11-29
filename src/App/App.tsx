@@ -16,12 +16,13 @@ import {initializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
 import {logoutTC} from "../features/Auth/auth-reducer";
 import {useAppDispatch, useAppSelector} from "./hooks/hooks";
-import {appSelectors} from "./index";
 import {authSelectors} from "../features/Auth";
+import {selectIsInitialized, selectStatus} from "./selectors";
+
 
 function App() {
-    const status = useAppSelector(appSelectors.selectStatus)
-    const isInitialized = useAppSelector(appSelectors.selectIsInitialized)
+    const status = useAppSelector(selectStatus)
+    const isInitialized = useAppSelector(selectIsInitialized)
     const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
     const dispatch = useAppDispatch()
 

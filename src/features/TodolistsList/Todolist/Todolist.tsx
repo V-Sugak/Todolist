@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
-import {addTaskTC, setTasksTC} from "../tasks-reducer";
 import {Task} from "./Task/Task";
 import {FilterType} from "../todolists-reducer";
 import {TaskStatuses} from "../../../api/todolists-api";
@@ -11,7 +10,8 @@ import {Delete} from "@mui/icons-material";
 import {ButtonGroup, List} from "@mui/material";
 import Button from "@mui/material/Button";
 import {RequestStatusType} from "../../../App/app-reducer";
-import {useAppDispatch, useAppSelector} from "../../../App/hooks/hooks";
+import {useActions, useAppSelector} from "../../../App/hooks/hooks";
+import {tasksActions} from "../index";
 
 type TodolistPropsType = {
     todolistId: string
@@ -24,12 +24,13 @@ type TodolistPropsType = {
 }
 
 export const Todolist = React.memo((props: TodolistPropsType) => {
-    const dispatch = useAppDispatch();
+    const {setTasksTC, addTaskTC} = useActions(tasksActions)
+
     useEffect(() => {
-        const thunk = setTasksTC(props.todolistId)
-        dispatch(thunk)
+        setTasksTC(props.todolistId)
     }, [])
     let tasks = useAppSelector(state => state.tasks[props.todolistId])
+
     const toCheckStatus = props.entityStatus === "loading"
 
     if (props.filter === "active") {
@@ -44,8 +45,8 @@ export const Todolist = React.memo((props: TodolistPropsType) => {
     const changeFilter = useCallback((value: FilterType) => props.changeFilter(value, props.todolistId), [props.changeFilter, props.todolistId]);
 
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskTC({todoListId: props.todolistId, title}));
-    }, [dispatch, props.todolistId]);
+        addTaskTC({todoListId: props.todolistId, title});
+    }, [props.todolistId]);
 
     const onChangeTodolistTitleHandler = useCallback((title: string) => {
         props.changeTitleTodolist(title, props.todolistId)

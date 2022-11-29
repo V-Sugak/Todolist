@@ -1,41 +1,43 @@
 import React, {useCallback, useEffect} from "react";
 import {Todolist} from "./Todolist/Todolist";
-import {
-    addTodoListTC,
-    changeTodolistFilterAC,
-    changeTodolistTitleTC,
-    FilterType,
-    removeTodoListTC,
-    setTodoListsTC
-} from "./todolists-reducer";
+import {FilterType} from "./todolists-reducer";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Grid, Paper} from "@mui/material";
 import {Navigate} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../App/hooks/hooks";
+import {useActions, useAppSelector} from "../../App/hooks/hooks";
+import {authSelectors} from "../Auth";
+import {selectTodoLists} from "./selectors";
+import {todolistsActions} from "./index";
 
 export const TodoLists = () => {
-    const dispatch = useAppDispatch();
-    const todoLists = useAppSelector(state => state.todoLists)
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const todoLists = useAppSelector(selectTodoLists)
+    const isLoggedIn = useAppSelector(authSelectors.selectIsLoggedIn)
+    const {
+        addTodoListTC,
+        changeTodolistTitleTC,
+        removeTodoListTC,
+        setTodoListsTC,
+        changeTodolistFilterAC
+    } = useActions(todolistsActions)
 
     useEffect(() => {
         if (isLoggedIn) {
-            dispatch(setTodoListsTC())
+            setTodoListsTC()
         }
     }, [])
 
     const changeFilter = useCallback((filter: FilterType, todoListId: string) => {
-        dispatch(changeTodolistFilterAC({filter,todoListId}))
-    }, [dispatch])
+        changeTodolistFilterAC({filter, todoListId})
+    }, [])
     const changeTitleTodolist = useCallback((title: string, todoListId: string) => {
-        dispatch(changeTodolistTitleTC({todoListId, title}))
-    }, [dispatch])
+        changeTodolistTitleTC({todoListId, title})
+    }, [])
     const removeTodolist = useCallback((todoListId: string) => {
-        dispatch(removeTodoListTC(todoListId))
-    }, [dispatch])
+        removeTodoListTC(todoListId)
+    }, [])
     const addTodolist = useCallback((title: string) => {
-        dispatch(addTodoListTC(title))
-    }, [dispatch])
+        addTodoListTC(title)
+    }, [])
 
     if (!isLoggedIn) {
         return <Navigate to={"login"}/>
